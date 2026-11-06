@@ -1,0 +1,10 @@
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { experiments, latency, unseenBooks } from '../lib/experiments';
+
+interface Datum { name: string; value: number; color: string }
+function ComparisonBars({ data, unit, label }: { data: Datum[]; unit: '%' | 'ms'; label: string }) {
+  return <div><div className="chart" role="img" aria-label={`${label}. ${data.map(d => `${d.name}: ${d.value}${unit}`).join('. ')}`}><ResponsiveContainer width="100%" height="100%"><BarChart data={data} margin={{ top: 18, right: 12, left: -24, bottom: 0 }} barSize={46} accessibilityLayer><CartesianGrid strokeDasharray="3 5" vertical={false} stroke="#263043" /><XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 12 }} dy={10} height={42} /><YAxis domain={unit === '%' ? [0, 100] : [0, 'auto']} tickFormatter={value => `${value}`} axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 11 }} /><Tooltip cursor={{ fill: '#ffffff05' }} contentStyle={{ background: '#151D2E', border: '1px solid #334155', borderRadius: 12, color: '#F8FAFC' }} formatter={(value: number) => [`${value.toFixed(2)}${unit === 'ms' ? ' ms' : '%'}`, label]} /><Bar dataKey="value" radius={[5, 5, 0, 0]} isAnimationActive={false}>{data.map(item => <Cell key={item.name} fill={item.color} />)}</Bar></BarChart></ResponsiveContainer></div><div className="chart-values">{data.map(item => <span key={item.name}><i style={{ background: item.color }} />{item.name}<b>{item.value.toFixed(2)}{unit === 'ms' ? ' ms' : '%'}</b></span>)}</div></div>;
+}
+export function ModelComparisonChart({ metric = 'accuracy' }: { metric?: 'accuracy' | 'f1' }) { return <ComparisonBars data={experiments.map(item => ({ ...item, value: item[metric] }))} unit="%" label={metric === 'accuracy' ? 'Test accuracy' : 'Test F1 score'} />; }
+export function LatencyChart() { return <ComparisonBars data={latency} unit="ms" label="CPU inference latency" />; }
+export function GeneralizationChart() { return <ComparisonBars data={unseenBooks} unit="%" label="Unseen book accuracy" />; }

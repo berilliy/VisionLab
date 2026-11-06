@@ -1,0 +1,32 @@
+# Local dependencies and generated artifacts
+**/node_modules/
+**/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+frontend/dist/
+frontend/.npm-cache/
+frontend/.verification/
+frontend/test-results/
+frontend/*.tsbuildinfo
+backend/cache/
+backend/.wheels/
+
+# Local configuration and editor state
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+.codex/
+.agents/
+.aws/
+.idea/
+.vscode/
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+*.log
+Thumbs.db
+.DS_Store
+.publish/
